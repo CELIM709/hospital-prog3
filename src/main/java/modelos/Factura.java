@@ -1,4 +1,4 @@
-package com.mycompany.hospital;
+package modelos;
 
 import java.util.Date;
 

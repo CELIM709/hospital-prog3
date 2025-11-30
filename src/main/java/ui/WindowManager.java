@@ -1,5 +1,6 @@
-package com.mycompany.hospital;
+package ui;
 
+import logica.Hospital;
 import java.awt.*;
 import javax.swing.*;
 

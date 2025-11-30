@@ -1,5 +1,6 @@
-package com.mycompany.hospital;
+package logica;
 
+import modelos.Cita;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

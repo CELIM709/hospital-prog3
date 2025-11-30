@@ -1,5 +1,6 @@
-package com.mycompany.hospital;
+package ui;
 
+import modelos.Paciente;
 import java.awt.*;
 import javax.swing.*;
 

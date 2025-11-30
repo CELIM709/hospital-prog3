@@ -1,5 +1,10 @@
-package com.mycompany.hospital;
+package logica;
 
+import modelos.Especialidad;
+import modelos.Factura;
+import modelos.Paciente;
+import modelos.Medico;
+import modelos.Cita;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

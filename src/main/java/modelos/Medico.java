@@ -1,4 +1,4 @@
-package com.mycompany.hospital;
+package modelos;
 
 public class Medico extends Persona {
     private Especialidad especialidad;
