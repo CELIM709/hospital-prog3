@@ -1,10 +1,6 @@
-package logica;
+package com.mycompany.hospital.logica;
 
-import modelos.Especialidad;
-import modelos.Factura;
-import modelos.Paciente;
-import modelos.Medico;
-import modelos.Cita;
+import com.mycompany.hospital.modelos.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +28,16 @@ public class Hospital {
         this.facturas = new ArrayList<>();
         
         this.gestorArchivos = new GestorArchivos();
+        inicializarEspecialidades();
     }
+       
+    private void inicializarEspecialidades() {
+        this.registrarEspecialidad(new Especialidad("Cardiología", 100));
+        this.registrarEspecialidad(new Especialidad("Pediatría", 200));
+        this.registrarEspecialidad(new Especialidad("Dermatología", 300));
+        this.registrarEspecialidad(new Especialidad("Ginecología", 400));
+    }
+    
 
     public boolean registrarMedico(Medico medico) {
         return this.medicos.add(medico);
@@ -95,5 +100,9 @@ public class Hospital {
 
     public List<Factura> getFacturas() {
         return facturas;
+    }
+    
+    public List<Especialidad> getEspecialidades() {
+        return especialidades;
     }
 }

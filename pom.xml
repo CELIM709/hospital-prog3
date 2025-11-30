@@ -8,6 +8,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>25</maven.compiler.release>
-        <exec.mainClass>com.mycompany.hospital.WindowManager</exec.mainClass>
+        <exec.mainClass>ui.WindowManager</exec.mainClass>
     </properties>
 </project>

@@ -1,4 +1,4 @@
-package modelos;
+package com.mycompany.hospital.modelos;
 
 public abstract class Persona {
     private String nombre;

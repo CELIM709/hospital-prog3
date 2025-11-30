@@ -1,4 +1,4 @@
-package modelos;
+package com.mycompany.hospital.modelos;
 
 import java.util.ArrayList;
 import java.util.List;

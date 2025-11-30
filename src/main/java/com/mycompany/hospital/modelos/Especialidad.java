@@ -1,4 +1,4 @@
-package modelos;
+package com.mycompany.hospital.modelos;
 
 public class Especialidad {
     private String nombre;

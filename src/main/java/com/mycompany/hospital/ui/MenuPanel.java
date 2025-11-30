@@ -1,4 +1,4 @@
-package ui;
+package com.mycompany.hospital.ui;
 
 import javax.swing.*;
 import java.awt.*;
