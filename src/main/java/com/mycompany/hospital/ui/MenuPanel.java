@@ -14,16 +14,19 @@ public class MenuPanel extends JPanel {
         JButton btnRegistrarPaciente = new JButton("Registrar Paciente");
         JButton btnRegistrarMedico = new JButton("Registrar Médico");
         JButton btnConsultar = new JButton("Consultar Disponibilidad");
+        JButton btnAgendar = new JButton("Agendar Cita");
         JButton btnSalir = new JButton("Salir");
 
         btnRegistrarPaciente.addActionListener(e -> manager.mostrarPantalla("REG_PACIENTE"));
         btnRegistrarMedico.addActionListener(e -> manager.mostrarPantalla("REG_MEDICO"));
         btnConsultar.addActionListener(e -> manager.mostrarPantalla("CONSULTA_DISP"));
+        btnAgendar.addActionListener(e -> manager.mostrarPantalla("AGENDAR_CITA"));
         btnSalir.addActionListener(e -> System.exit(0));
 
         this.add(titulo);
         this.add(btnRegistrarPaciente);
         this.add(btnRegistrarMedico);
+        this.add(btnAgendar);
         this.add(btnConsultar);
         this.add(btnSalir);
     }
