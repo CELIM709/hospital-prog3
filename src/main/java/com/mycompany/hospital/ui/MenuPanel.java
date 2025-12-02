@@ -15,12 +15,16 @@ public class MenuPanel extends JPanel {
         JButton btnRegistrarMedico = new JButton("Registrar Médico");
         JButton btnConsultar = new JButton("Consultar Disponibilidad");
         JButton btnAgendar = new JButton("Agendar Cita");
+        JButton btnModificar = new JButton("Modificar/Cancelar Cita");
+
         JButton btnSalir = new JButton("Salir");
 
         btnRegistrarPaciente.addActionListener(e -> manager.mostrarPantalla("REG_PACIENTE"));
         btnRegistrarMedico.addActionListener(e -> manager.mostrarPantalla("REG_MEDICO"));
         btnConsultar.addActionListener(e -> manager.mostrarPantalla("CONSULTA_DISP"));
         btnAgendar.addActionListener(e -> manager.mostrarPantalla("AGENDAR_CITA"));
+        btnModificar.addActionListener(e -> manager.mostrarPantalla("MOD_CITA"));
+
         btnSalir.addActionListener(e -> System.exit(0));
 
         this.add(titulo);
@@ -28,6 +32,8 @@ public class MenuPanel extends JPanel {
         this.add(btnRegistrarMedico);
         this.add(btnAgendar);
         this.add(btnConsultar);
+        this.add(btnModificar);
+
         this.add(btnSalir);
     }
 }
