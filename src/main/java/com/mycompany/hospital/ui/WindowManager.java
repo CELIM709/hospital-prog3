@@ -26,6 +26,7 @@ public class WindowManager extends JFrame {
 
         this.mainPanel.add(new RegistroPacientePanel(this), "REG_PACIENTE");
         this.mainPanel.add(new RegistroMedicoPanel(this), "REG_MEDICO");
+        this.mainPanel.add(new ConsultaDisponibilidadPanel(this), "CONSULTA_DISP");
         this.add(mainPanel);
     }
 
