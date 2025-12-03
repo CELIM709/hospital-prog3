@@ -6,7 +6,7 @@ import javax.swing.*;
 public class MenuPanel extends JPanel {
 
     public MenuPanel(WindowManager manager) {
-        this.setLayout(new GridLayout(5, 1, 10, 10));
+        this.setLayout(new GridLayout(10, 1, 10, 10));
 
         JLabel titulo = new JLabel("Bienvenido al Sistema Hospitalario", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
@@ -33,6 +33,10 @@ public class MenuPanel extends JPanel {
         this.add(btnAgendar);
         this.add(btnConsultar);
         this.add(btnModificar);
+
+        JButton btnFacturar = new JButton("Facturación y Pago");
+        btnFacturar.addActionListener(e -> manager.mostrarPantalla("FACTURACION"));
+        this.add(btnFacturar);
 
         this.add(btnSalir);
     }

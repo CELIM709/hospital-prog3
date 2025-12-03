@@ -29,6 +29,7 @@ public class WindowManager extends JFrame {
         this.mainPanel.add(new ConsultaDisponibilidadPanel(this), "CONSULTA_DISP");
         this.mainPanel.add(new AgendarCitaPanel(this), "AGENDAR_CITA");
         this.mainPanel.add(new ModificarCitaPanel(this), "MOD_CITA");
+        this.mainPanel.add(new FacturacionPanel(this), "FACTURACION");
 
         this.add(mainPanel);
     }
