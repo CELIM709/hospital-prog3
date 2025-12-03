@@ -3,7 +3,9 @@ package com.mycompany.hospital.logica;
 import com.mycompany.hospital.modelos.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Hospital {
 
@@ -51,23 +53,63 @@ public class Hospital {
         this.especialidades.add(especialidad);
     }
 
+    public Medico buscarMedicoPorCedula(int cedula) {
+        for (Medico m : medicos) {
+            if (m.getCedula() == cedula) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    public void cargarCitasAlInicio() {
+        List<String> lineas = gestorArchivos.leerCitas();
+
+        System.out.println("Cargando " + lineas.size() + " citas...");
+
+        for (String linea : lineas) {
+            try {
+                String[] datos = linea.split(";");
+
+                int cedulaPac = Integer.parseInt(datos[0]);
+                int cedulaMed = Integer.parseInt(datos[1]);
+                long fechaMilis = Long.parseLong(datos[2]);
+                String hora = datos[3];
+                int diaIdx = Integer.parseInt(datos[4]);
+                int bloqueIdx = Integer.parseInt(datos[5]);
+                String estado = datos[6];
+
+                Paciente p = buscarPacientePorCedula(cedulaPac);
+                Medico m = buscarMedicoPorCedula(cedulaMed);
+
+                if (p != null && m != null) {
+                    Date fecha = new Date(fechaMilis);
+
+                    Cita citaRecuperada = new Cita(m, p, fecha, hora);
+                    citaRecuperada.cambiarEstado(estado);
+
+                    if (m.getAgenda()[bloqueIdx][diaIdx] == null) {
+                        m.getAgenda()[bloqueIdx][diaIdx] = citaRecuperada;
+                    }
+
+                    p.getHistorial().add(citaRecuperada);
+
+                }
+
+            } catch (Exception e) {
+                System.err.println("Error leyendo una línea del archivo: " + e.getMessage());
+            }
+        }
+    }
+
     public boolean registrarCita(Medico medico, Paciente paciente, Date fecha, String hora, int diaIndice, int bloqueIndice) {
-
-        if (diaIndice < 0 || diaIndice >= 5 || bloqueIndice < 0 || bloqueIndice >= 8) {
-            return false;
-        }
-
-        if (medico.getAgenda()[bloqueIndice][diaIndice] != null) {
-            return false;
-        }
 
         Cita nuevaCita = new Cita(medico, paciente, fecha, hora);
 
         medico.getAgenda()[bloqueIndice][diaIndice] = nuevaCita;
-
         paciente.getHistorial().add(nuevaCita);
 
-        gestorArchivos.guardarCita(nuevaCita);
+        gestorArchivos.guardarCita(nuevaCita, diaIndice, bloqueIndice);
 
         return true;
     }
@@ -126,6 +168,33 @@ public class Hospital {
                 }
             }
         }
+    }
+
+    public Map<String, Integer> obtenerEstadisticasPorEspecialidad() {
+        Map<String, Integer> contadores = new HashMap<>();
+
+        for (Especialidad esp : this.especialidades) {
+            contadores.put(esp.getNombre(), 0);
+        }
+
+        for (Medico m : this.medicos) {
+            String nombreEsp = m.getEspecialidad().getNombre();
+            int citasDelMedico = 0;
+
+            Cita[][] agenda = m.getAgenda();
+            for (int i = 0; i < 8; i++) { // Filas
+                for (int j = 0; j < 5; j++) { // Columnas
+                    if (agenda[i][j] != null) {
+                        citasDelMedico++;
+                    }
+                }
+            }
+
+            int totalActual = contadores.get(nombreEsp);
+            contadores.put(nombreEsp, totalActual + citasDelMedico);
+        }
+
+        return contadores;
     }
 
     public String getNombre() {

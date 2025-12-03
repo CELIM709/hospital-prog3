@@ -1,2 +1,4 @@
 Fecha: Tue Dec 02 00:33:50 GMT-04:00 2025 | Medico: 1 | Paciente: 1
 Fecha: Tue Dec 02 22:53:47 GMT-04:00 2025 | Medico: 2 | Paciente: 1
+Fecha: Tue Dec 02 23:26:32 GMT-04:00 2025 | Medico: 1 | Paciente: 1
+Fecha: Tue Dec 02 23:50:42 GMT-04:00 2025 | Medico: 3 | Paciente: 2

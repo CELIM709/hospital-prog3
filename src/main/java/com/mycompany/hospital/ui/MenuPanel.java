@@ -38,6 +38,15 @@ public class MenuPanel extends JPanel {
         btnFacturar.addActionListener(e -> manager.mostrarPantalla("FACTURACION"));
         this.add(btnFacturar);
 
+        JButton btnReportes = new JButton("Ver Reportes y Gráficos");
+        btnReportes.addActionListener(e -> manager.mostrarPantalla("REPORTES"));
+        this.add(btnReportes);
+
+        JButton btnHistorial = new JButton("Historial Médico");
+        btnHistorial.addActionListener(e -> manager.mostrarPantalla("HISTORIAL"));
+
+        this.add(btnHistorial);
+
         this.add(btnSalir);
     }
 }
