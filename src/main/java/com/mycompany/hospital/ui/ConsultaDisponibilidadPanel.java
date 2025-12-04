@@ -20,6 +20,8 @@ public class ConsultaDisponibilidadPanel extends JPanel {
         this.manager = manager;
         this.setLayout(new BorderLayout());
 
+        JPanel norteContainer = new JPanel(new GridLayout(2, 1));
+
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         cmbMedicos = new JComboBox<>();
         JButton btnConsultar = new JButton("Ver Horario");
@@ -28,8 +30,11 @@ public class ConsultaDisponibilidadPanel extends JPanel {
         topPanel.add(cmbMedicos);
         topPanel.add(btnConsultar);
 
-        String[] columnas = {"Hora", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
+        norteContainer.add(new JLabel("Consulta de Disponibilidad", SwingConstants.CENTER));
+        norteContainer.add(topPanel);
 
+        // --- TABLA ---
+        String[] columnas = {"Hora", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
         modeloTabla = new DefaultTableModel(columnas, 0);
         tablaHorario = new JTable(modeloTabla);
         tablaHorario.setRowHeight(30);
@@ -40,6 +45,7 @@ public class ConsultaDisponibilidadPanel extends JPanel {
         JButton btnVolver = new JButton("Volver");
         bottomPanel.add(btnVolver);
 
+        // --- EVENTOS ---
         btnConsultar.addActionListener(e -> mostrarHorarioMedico());
 
         btnVolver.addActionListener(e -> {
@@ -48,7 +54,12 @@ public class ConsultaDisponibilidadPanel extends JPanel {
 
         this.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                // 1. Recargar lista (por si hay médicos nuevos)
                 cargarListaMedicos();
+                // Si hay médicos, mostramos el horario del primero (o del seleccionado) automáticamente
+                if (cmbMedicos.getItemCount() > 0) {
+                    mostrarHorarioMedico();
+                }
             }
 
             public void ancestorRemoved(javax.swing.event.AncestorEvent event) {
@@ -58,22 +69,30 @@ public class ConsultaDisponibilidadPanel extends JPanel {
             }
         });
 
-        this.add(new JLabel("Consulta de Disponibilidad", SwingConstants.CENTER), BorderLayout.NORTH);
-        this.add(topPanel, BorderLayout.NORTH); // Ponemos el selector arriba
+        this.add(norteContainer, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void cargarListaMedicos() {
+        int seleccionPrevia = cmbMedicos.getSelectedIndex();
+
         cmbMedicos.removeAllItems();
         listaMedicos = manager.getHospital().getMedicos();
 
         for (Medico m : listaMedicos) {
             cmbMedicos.addItem(m.getNombre() + " " + m.getApellido() + " - " + m.getEspecialidad().getNombre());
         }
+
+        if (seleccionPrevia >= 0 && seleccionPrevia < cmbMedicos.getItemCount()) {
+            cmbMedicos.setSelectedIndex(seleccionPrevia);
+        } else if (cmbMedicos.getItemCount() > 0) {
+            cmbMedicos.setSelectedIndex(0);
+        }
     }
 
     private void mostrarHorarioMedico() {
+        // Limpiamos la foto vieja
         modeloTabla.setRowCount(0);
 
         int indice = cmbMedicos.getSelectedIndex();
@@ -82,14 +101,12 @@ public class ConsultaDisponibilidadPanel extends JPanel {
         }
 
         Medico medicoSeleccionado = listaMedicos.get(indice);
-
         Cita[][] agenda = medicoSeleccionado.getAgenda();
 
         String[] horas = {"08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"};
 
         for (int fila = 0; fila < 8; fila++) {
             Object[] filaDatos = new Object[6];
-
             filaDatos[0] = horas[fila];
 
             for (int dia = 0; dia < 5; dia++) {
@@ -98,7 +115,11 @@ public class ConsultaDisponibilidadPanel extends JPanel {
                 if (cita == null) {
                     filaDatos[dia + 1] = "DISPONIBLE";
                 } else {
-                    filaDatos[dia + 1] = "OCUPADO (" + cita.getPaciente().getNombre() + ")";
+                    if ("CANCELADA".equals(cita.getEstado())) {
+                        filaDatos[dia + 1] = "CANCELADA";
+                    } else {
+                        filaDatos[dia + 1] = "OCUPADO (" + cita.getPaciente().getNombre() + ")";
+                    }
                 }
             }
             modeloTabla.addRow(filaDatos);

@@ -129,7 +129,46 @@ public class Hospital {
         return null;
     }
 
-    public boolean modificarCita(Cita cita, String nuevoEstado, int nuevoDia, int nuevoBloque, String nuevaHoraTexto) {
+    public boolean modificarCita(Cita cita, String nuevoEstado, int nuevoDia, int nuevoBloque, String nuevaHoraTexto, java.util.Date nuevaFecha) {
+        Medico medico = cita.getMedico();
+        Cita[][] agenda = medico.getAgenda();
+
+        // 1. CASO CANCELACIÓN
+        if (nuevoEstado.equals("CANCELADA")) {
+            borrarCitaDeLaAgenda(medico, cita);
+            cita.cambiarEstado("CANCELADA");
+            return true;
+        }
+
+        // 2. VERIFICAR MOVIMIENTO EN LA MATRIZ
+        // Preguntamos: ¿En la casilla destino, está YA esta misma cita?
+        boolean esLaMismaCasilla = (agenda[nuevoBloque][nuevoDia] == cita);
+
+        // Si NO es la misma casilla, significa que hay que moverla (cambió día u hora)
+        if (!esLaMismaCasilla) {
+
+            // A. Verificar que el destino esté libre
+            if (agenda[nuevoBloque][nuevoDia] != null) {
+                return false; // Error: Está ocupado
+            }
+
+            // B. Borrar de la posición anterior (IMPORTANTE)
+            borrarCitaDeLaAgenda(medico, cita);
+
+            // C. Asignar a la nueva posición
+            agenda[nuevoBloque][nuevoDia] = cita;
+        }
+
+        // 3. ACTUALIZACIÓN DE DATOS DEL OBJETO (Siempre se ejecuta)
+        // Esto garantiza que el texto se actualice aunque la lógica de matriz falle
+        cita.cambiarHora(nuevaHoraTexto);
+        cita.cambiarFecha(nuevaFecha); // Asegúrate de tener este método en Cita
+        cita.cambiarEstado(nuevoEstado);
+
+        return true;
+    }
+
+    /*public boolean modificarCita(Cita cita, String nuevoEstado, int nuevoDia, int nuevoBloque, String nuevaHoraTexto) {
         Medico medico = cita.getMedico();
         Cita[][] agenda = medico.getAgenda();
 
@@ -139,9 +178,10 @@ public class Hospital {
             return true;
         }
 
-        boolean cambioHorario = !cita.getHora().equals(nuevaHoraTexto);
+        boolean esLaMismaCasilla = (agenda[nuevoBloque][nuevoDia] == cita);
 
-        if (cambioHorario) {
+        if (!esLaMismaCasilla) {
+
             if (agenda[nuevoBloque][nuevoDia] != null) {
                 return false;
             }
@@ -151,20 +191,21 @@ public class Hospital {
             agenda[nuevoBloque][nuevoDia] = cita;
 
             cita.cambiarHora(nuevaHoraTexto);
+
         }
 
         cita.cambiarEstado(nuevoEstado);
 
         return true;
-    }
-
+    }*/
     private void borrarCitaDeLaAgenda(Medico medico, Cita citaObjetivo) {
         Cita[][] agenda = medico.getAgenda();
         for (int fila = 0; fila < 8; fila++) {
             for (int col = 0; col < 5; col++) {
+                // Comparamos referencias de memoria (POO Puro)
                 if (agenda[fila][col] == citaObjetivo) {
-                    agenda[fila][col] = null;
-                    return;
+                    agenda[fila][col] = null; // Liberamos la celda
+                    return; // Terminamos apenas la encontramos
                 }
             }
         }
