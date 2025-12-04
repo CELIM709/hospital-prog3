@@ -104,9 +104,20 @@ public class Hospital {
 
     public boolean registrarCita(Medico medico, Paciente paciente, Date fecha, String hora, int diaIndice, int bloqueIndice) {
 
+        // 1. VALIDACIÓN DE RANGOS (Seguridad para no romper la matriz)
+        if (diaIndice < 0 || diaIndice >= 5 || bloqueIndice < 0 || bloqueIndice >= 8) {
+            return false;
+        }
+
+        // 2. VALIDACIÓN DE CHOQUE DE HORARIO
+        if (medico.getAgenda()[bloqueIndice][diaIndice] != null) {
+            return false; //Ya existe una cita en ese hueco.
+        }
+
         Cita nuevaCita = new Cita(medico, paciente, fecha, hora);
 
         medico.getAgenda()[bloqueIndice][diaIndice] = nuevaCita;
+
         paciente.getHistorial().add(nuevaCita);
 
         gestorArchivos.guardarCita(nuevaCita, diaIndice, bloqueIndice);
