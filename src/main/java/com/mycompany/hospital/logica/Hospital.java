@@ -144,36 +144,30 @@ public class Hospital {
         Medico medico = cita.getMedico();
         Cita[][] agenda = medico.getAgenda();
 
-        // 1. CASO CANCELACIÓN
         if (nuevoEstado.equals("CANCELADA")) {
+
             borrarCitaDeLaAgenda(medico, cita);
-            cita.cambiarEstado("CANCELADA");
+
+            cita.getPaciente().getHistorial().remove(cita);
+
             return true;
         }
 
         // 2. VERIFICAR MOVIMIENTO EN LA MATRIZ
-        // Preguntamos: ¿En la casilla destino, está YA esta misma cita?
         boolean esLaMismaCasilla = (agenda[nuevoBloque][nuevoDia] == cita);
 
-        // Si NO es la misma casilla, significa que hay que moverla (cambió día u hora)
         if (!esLaMismaCasilla) {
-
-            // A. Verificar que el destino esté libre
             if (agenda[nuevoBloque][nuevoDia] != null) {
-                return false; // Error: Está ocupado
+                return false; // Ocupado
             }
 
-            // B. Borrar de la posición anterior (IMPORTANTE)
             borrarCitaDeLaAgenda(medico, cita);
-
-            // C. Asignar a la nueva posición
             agenda[nuevoBloque][nuevoDia] = cita;
         }
 
-        // 3. ACTUALIZACIÓN DE DATOS DEL OBJETO (Siempre se ejecuta)
-        // Esto garantiza que el texto se actualice aunque la lógica de matriz falle
+        // 3. ACTUALIZACIÓN DE DATOS
         cita.cambiarHora(nuevaHoraTexto);
-        cita.cambiarFecha(nuevaFecha); // Asegúrate de tener este método en Cita
+        cita.cambiarFecha(nuevaFecha);
         cita.cambiarEstado(nuevoEstado);
 
         return true;
