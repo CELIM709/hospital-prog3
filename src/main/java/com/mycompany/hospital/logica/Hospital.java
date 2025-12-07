@@ -173,36 +173,7 @@ public class Hospital {
         return true;
     }
 
-    /*public boolean modificarCita(Cita cita, String nuevoEstado, int nuevoDia, int nuevoBloque, String nuevaHoraTexto) {
-        Medico medico = cita.getMedico();
-        Cita[][] agenda = medico.getAgenda();
-
-        if (nuevoEstado.equals("CANCELADA")) {
-            borrarCitaDeLaAgenda(medico, cita);
-            cita.cambiarEstado("CANCELADA");
-            return true;
-        }
-
-        boolean esLaMismaCasilla = (agenda[nuevoBloque][nuevoDia] == cita);
-
-        if (!esLaMismaCasilla) {
-
-            if (agenda[nuevoBloque][nuevoDia] != null) {
-                return false;
-            }
-
-            borrarCitaDeLaAgenda(medico, cita);
-
-            agenda[nuevoBloque][nuevoDia] = cita;
-
-            cita.cambiarHora(nuevaHoraTexto);
-
-        }
-
-        cita.cambiarEstado(nuevoEstado);
-
-        return true;
-    }*/
+    
     private void borrarCitaDeLaAgenda(Medico medico, Cita citaObjetivo) {
         Cita[][] agenda = medico.getAgenda();
         for (int fila = 0; fila < 8; fila++) {
